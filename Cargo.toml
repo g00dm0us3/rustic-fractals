@@ -1,0 +1,14 @@
+[package]
+name = "rustic-fractals"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+image = "0.24.2"
+ndarray = "0.10"
+ndarray-linalg = { version = "0.8", default-features = false }
+serde = { version = "1.0.104", features = ["derive"] }
+serde_json = "1.0.48"
+rand = "0.8.5"
