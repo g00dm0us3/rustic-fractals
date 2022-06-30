@@ -1,13 +1,8 @@
-use ndarray::{arr1, arr2, Array2};
+use ndarray::{arr2, Array2};
 use std::cmp;
-use std::hash::Hash;
-use std::{marker::PhantomData, collections::HashMap};
-
-use serde::de::{Deserialize, Deserializer, Visitor, MapAccess};
 
 use std::fs::read_to_string;
-use std::io::copy;
-use std::io::stdout;
+use std::collections::HashMap;
 
 mod chaos_game;
 use chaos_game::*;
@@ -23,7 +18,6 @@ pub(crate) struct Transform {
 
 #[derive(Debug)]
 struct Ifs {
-    name: String,
     transforms: Vec<Transform>
 }
 
@@ -99,20 +93,8 @@ fn parse_transforms(json: &serde_json::Value) -> Vec<Transform> {
 
 fn main() {
     let mut db: HashMap<String, Box<Ifs>> = HashMap::new();
-    let vec = arr1(&[1, 1, 1]);
 
-    // two rows, three columns
-    let mat = arr2(&[
-        [1,0,1],
-        [0,1,2]
-        ]);
-
-    // vec in a column vector 
-    let res = mat.dot(&vec);
-
-    println!("{}, {}", res[0], res[1]);
-
-    let mut str = read_to_string("/Users/homer/rustic-fractals/src/ifs_presets.json").expect("Cannot read file!");
+    let str = read_to_string("/Users/homer/rustic-fractals/src/ifs_presets.json").expect("Cannot read file!");
     let json: serde_json::Value = serde_json::from_str(&str).expect("JSON was not well-formatted");
 
     match json {
@@ -126,7 +108,7 @@ fn main() {
                         let json_transforms = map.get_key_value("transforms").unwrap().1;
                         let transforms = parse_transforms(json_transforms);
 
-                        let boxed: Box<Ifs> = Box::new(Ifs{ name: name.to_string(), transforms: transforms });
+                        let boxed: Box<Ifs> = Box::new(Ifs{ transforms: transforms });
                         db.insert(name.to_string(), boxed);
                     },
                     _ => continue
@@ -140,8 +122,8 @@ fn main() {
    let transforms = db.get_key_value("Barnsley fern").unwrap().1;
 
    // increase number of iterations for longer computation and more precise picture
-   let hist = chaos_game::run_chaos_game(&transforms.transforms, 2000*2000);
-   let img = frac_render::img_bw(hist, (500, 500));
+   let hist = run_chaos_game(&transforms.transforms, 2000*2000);
+   let img = img_bw(hist, (500, 500));
 
    img.save("fractal.png").unwrap();
 }

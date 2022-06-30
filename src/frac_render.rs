@@ -30,9 +30,6 @@ fn resample_regular(histogram: Box<[u16]>,
     
     assert!(HIST_DIM % img_sz.0 == 0 && HIST_DIM % img_sz.1 == 0);
 
-    let mut x_img: usize = 0;
-    let mut y_img: usize = 0;
-
     let x_scale = (HIST_DIM / img_sz.0) as usize;
     let y_scale = (HIST_DIM / img_sz.1) as usize;
     // - todo: redo with ranges
@@ -59,7 +56,7 @@ fn resample_regular(histogram: Box<[u16]>,
 
                     let lin_idx = sub_y*(HIST_DIM as usize)+sub_x;
 
-                    summed += (histogram[lin_idx] as f32);
+                    summed += histogram[lin_idx] as f32;
                     count_summed += 1;
                 }
             }
@@ -67,7 +64,7 @@ fn resample_regular(histogram: Box<[u16]>,
             if summed > 0.0 {
                 count_non_zero += 1;
             }
-            subsampled[y_img*img_width+x_img] = summed; // (count_summed as f32);
+            subsampled[y_img*img_width+x_img] = summed / (count_summed as f32);
         }
     }
 

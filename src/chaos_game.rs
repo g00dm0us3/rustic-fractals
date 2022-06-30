@@ -8,7 +8,6 @@ struct Point {
     y: f32
 }
 
-
 #[derive(Debug)]
 struct Rect {
     top_left: Point,
