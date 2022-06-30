@@ -36,7 +36,7 @@ fn resample_regular(histogram: Box<[u16]>,
 
     let (img_width, img_height) = (img_sz.0 as usize, img_sz.1 as usize);
 
-    let mut subsampled: Vec<f32> = iter::repeat(0.0).take(img_width*img_height).collect();//Vec::with_capacity();
+    let mut subsampled: Vec<f32> = iter::repeat(0.0).take(img_width*img_height).collect();
 
     let mut count_non_zero = 0;
     for x_img in 0..img_width {

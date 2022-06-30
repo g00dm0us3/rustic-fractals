@@ -10,6 +10,8 @@ use chaos_game::*;
 mod frac_render;
 use frac_render::*;
 
+use std::time::Instant;
+
 #[derive(Debug)]
 pub(crate) struct Transform {
     matrix: Array2<f32>,
@@ -78,7 +80,7 @@ fn parse_transforms(json: &serde_json::Value) -> Vec<Transform> {
 
         let mut next_prob = prepared_list[i - 1].prob + res[i].prob;
 
-        if f32::abs(next_prob - 1.0) <= 0.1 {
+        if f32::abs(next_prob - 1.0) <= 0.1 && i == res.len() - 1 {
             next_prob = 1.0;
         }
 
@@ -121,9 +123,12 @@ fn main() {
     // look in ifs_presets for more IFS samples
    let transforms = db.get_key_value("Barnsley fern").unwrap().1;
 
+   let now = Instant::now();
    // increase number of iterations for longer computation and more precise picture
-   let hist = run_chaos_game(&transforms.transforms, 2000*2000);
+   let hist = run_chaos_game(&transforms.transforms, 1000*1000);
    let img = img_bw(hist, (500, 500));
+   let elapsed = now.elapsed();
 
-   img.save("fractal.png").unwrap();
+   println!("generated 500x500 image in {} (s)", elapsed.as_secs_f32());
+   //img.save("Barnsley fern.png").unwrap();
 }
