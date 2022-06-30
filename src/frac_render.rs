@@ -32,7 +32,6 @@ fn resample_regular(histogram: Box<[u16]>,
 
     let x_scale = (HIST_DIM / img_sz.0) as usize;
     let y_scale = (HIST_DIM / img_sz.1) as usize;
-    // - todo: redo with ranges
 
     let (img_width, img_height) = (img_sz.0 as usize, img_sz.1 as usize);
 
@@ -42,6 +41,7 @@ fn resample_regular(histogram: Box<[u16]>,
     for x_img in 0..img_width {
         for y_img in 0..img_height {
 
+            // - todo: sample from the mid of the interval (edges??)
             let sub_x_lower = (x_img*x_scale).min((HIST_DIM - 1) as usize);
             let sub_x_upper = (x_img*x_scale + x_scale + (sample_width as usize)).min((HIST_DIM - 1) as usize);
 
